@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MyWebApiBasic.Data;
+using MyWebApiBasic.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace MyWebApiBasic
             services.AddControllers();
             services.AddDbContext<MyDBContext>(op => { op.UseSqlServer(Configuration.GetConnectionString("MyDB")); 
             }) ;
+            services.AddScoped<ILoaiRepository , LoaiRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyWebApiBasic", Version = "v1" });

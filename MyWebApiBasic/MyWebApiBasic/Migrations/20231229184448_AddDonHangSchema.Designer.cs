@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyWebApiBasic.Data;
 
 namespace MyWebApiBasic.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class MyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231229184448_AddDonHangSchema")]
+    partial class AddDonHangSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace MyWebApiBasic.Migrations
                     b.Property<DateTime>("NgayDat")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
+                        .HasDefaultValue(new DateTime(2023, 12, 29, 18, 44, 48, 253, DateTimeKind.Utc).AddTicks(5864));
 
                     b.Property<DateTime>("NgayGiao")
                         .HasColumnType("datetime2");
@@ -54,10 +56,10 @@ namespace MyWebApiBasic.Migrations
 
             modelBuilder.Entity("MyWebApiBasic.Data.DonHangChiTiet", b =>
                 {
-                    b.Property<Guid>("MaHh")
+                    b.Property<Guid>("MaDonHang")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MaDonHang")
+                    b.Property<Guid>("MaHh")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("DonGia")
@@ -69,9 +71,11 @@ namespace MyWebApiBasic.Migrations
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
 
-                    b.HasKey("MaHh", "MaDonHang");
+                    b.HasKey("MaDonHang", "MaHh");
 
-                    b.ToTable("DonHangChiTiet");
+                    b.HasIndex("MaHh");
+
+                    b.ToTable("ChiTietDonHang");
                 });
 
             modelBuilder.Entity("MyWebApiBasic.Data.HangHoa", b =>
@@ -124,14 +128,15 @@ namespace MyWebApiBasic.Migrations
                 {
                     b.HasOne("MyWebApiBasic.Data.DonHang", "DonHang")
                         .WithMany("donHangChiTiets")
-                        .HasForeignKey("MaHh")
-                        .HasConstraintName("FK_DonHangChiTiet_HangHoa")
+                        .HasForeignKey("MaDonHang")
+                        .HasConstraintName("FK_DonHangChiTiet_DonHang")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MyWebApiBasic.Data.HangHoa", "HangHoa")
-                        .WithMany("DonHangChiTiets")
+                        .WithMany("donHangChiTiets")
                         .HasForeignKey("MaHh")
+                        .HasConstraintName("FK_DonHangChiTiet_HangHoa")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -156,7 +161,7 @@ namespace MyWebApiBasic.Migrations
 
             modelBuilder.Entity("MyWebApiBasic.Data.HangHoa", b =>
                 {
-                    b.Navigation("DonHangChiTiets");
+                    b.Navigation("donHangChiTiets");
                 });
 
             modelBuilder.Entity("MyWebApiBasic.Data.Loai", b =>
