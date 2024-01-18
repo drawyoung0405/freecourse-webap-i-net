@@ -34,6 +34,7 @@ namespace MyWebApiBasic
             services.AddDbContext<MyDBContext>(op => { op.UseSqlServer(Configuration.GetConnectionString("MyDB")); 
             }) ;
             services.AddScoped<ILoaiRepository , LoaiRepository>();
+            services.AddScoped<IHangHoaRepository, HangHoaRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyWebApiBasic", Version = "v1" });
