@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyWebApiBasic.Data;
 using MyWebApiBasic.Models;
@@ -35,6 +36,7 @@ namespace MyWebApiBasic.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public IActionResult CreateLoai(LoaiModel model)
         {
             try
